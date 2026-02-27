@@ -23,18 +23,33 @@ async def startMethod(message: Message):
 async def check():
     return {"status": "bot is running"}
 
-async def main():
+
+@app.get("/")
+async def check():
+    return {"status": "bot is running"}
+
+
+@app.on_event("startup")
+async def startup():
     bot = Bot(token=BOT_TOKEN)
+    asyncio.create_task(disp.start_polling(bot))
 
-    await disp.start_polling(bot)
-
-
-async def runner():
-    asyncio.run(main())
 
 if __name__ == "__main__":
-    threading.Thread(target=runner).start()
-    # result = asyncio.get_event_loop()
-    # result.create_task(main())
-    uvicorn.run(app,host = "0.0.0.0", port=PORT)
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
+
+# async def main():
+#     bot = Bot(token=BOT_TOKEN)
+#
+#     await disp.start_polling(bot)
+#
+#
+# async def runner():
+#     asyncio.run(main())
+#
+# if __name__ == "__main__":
+#     threading.Thread(target=runner).start()
+#     # result = asyncio.get_event_loop()
+#     # result.create_task(main())
+#     uvicorn.run(app,host = "0.0.0.0", port=PORT)
 
