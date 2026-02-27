@@ -7,9 +7,10 @@ from aiogram.filters import Command
 from aiogram.types import Message
 from fastapi import FastAPI
 import uvicorn
-
-BOT_TOKEN = "8683533315:AAHUlPP7MjrOePZAP54SoRaYvHEdi0fhm3s"
-PORT = 10000
+from dotenv import load_dotenv
+load_dotenv()
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+PORT = int(os.getenv("PORT"))
 
 disp = Dispatcher()
 app = FastAPI()
