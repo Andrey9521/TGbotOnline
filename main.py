@@ -7,7 +7,7 @@ from fastapi import FastAPI
 import uvicorn
 
 BOT_TOKEN = "8683533315:AAHUlPP7MjrOePZAP54SoRaYvHEdi0fhm3s"
-PORT = 8080
+PORT = 10000
 
 disp = Dispatcher()
 app = FastAPI()
