@@ -1,5 +1,7 @@
 import os
 import asyncio
+import threading
+
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
 from aiogram.types import Message
@@ -26,8 +28,13 @@ async def main():
 
     await disp.start_polling(bot)
 
+
+async def runner():
+    asyncio.run(main())
+
 if __name__ == "__main__":
-    result = asyncio.get_event_loop()
-    result.create_task(main())
+    threading.Thread(target=runner).start()
+    # result = asyncio.get_event_loop()
+    # result.create_task(main())
     uvicorn.run(app,host = "0.0.0.0", port=PORT)
 
