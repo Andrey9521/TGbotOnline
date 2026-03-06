@@ -14,7 +14,7 @@ PORT = int(os.getenv("PORT"))
 
 disp = Dispatcher()
 app = FastAPI()
-
+tasks = []
 @disp.message(Command("start"))
 async def startMethod(message: Message):
     await message.answer("Bot is active")
@@ -29,6 +29,43 @@ async def check():
 async def check():
     return {"status": "bot is running"}
 
+@app.get("/add")
+async def add(message: Message):
+    text = message.text.replace("/add", "").strip()
+
+    if not text:
+        await message.answer("Будь ласка, введи задачу після команди:\n/add купити молоко")
+        return
+    tasks.append(text)
+    await message.answer("Додано задачу: {text}")
+
+
+@app.get("/show")
+async def show(message: Message):
+    if not tasks:
+        await message.answer("Список задач порожній")
+        return
+
+    result = "\n".join([f"{i + 1}. {task}" for i, task in enumerate(tasks)])
+    await message.answer("Твої задачі:\n" + result)
+
+
+@disp.message(Command("delete"))
+async def delete_task(message: Message):
+    parts = message.text.split()
+
+    if len(parts) < 2 or not parts[1].isdigit():
+        await message.answer("Вкажи номер задачі для видалення:\n/delete 2")
+        return
+
+    index = int(parts[1]) - 1
+
+    if index < 0 or index >= len(tasks):
+        await message.answer("Невірний номер задачі.")
+        return
+
+    removed = tasks.pop(index)
+    await message.answer(f"Видалено задачу: {removed}")
 
 @app.on_event("startup")
 async def startup():
